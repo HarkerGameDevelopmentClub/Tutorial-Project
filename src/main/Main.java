@@ -3,7 +3,7 @@
  */
 package main;
 
-import javafx.application.Application; // This is the root class for JavaFX Apps
+import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -12,14 +12,16 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
-// YOUR MISSION, SHOULD YOU CHOOSE TO ACCEPT IT STOP
-// STUDY THE THREE CODE FILES IN THIS DEMO PROJECT
+// YOUR MISSION, SHOULD YOU CHOOSE TO ACCEPT IT                                  STOP
+// CREATE A TEXT FILE NAMED AFTER YOU IN THE SRC FOLDER AND COMMIT IT            STOP
+// THEN STUDY THE THREE CODE FILES IN THIS DEMO PROJECT
 // AND EDIT IT SO THAT THE PROJECT DISPLAYS THE CURRENT
 // FRAME ON SCREEN, AND RESETS THE # OF FRAMES
-// WHENEVER A KEY IS PRESSED STOP
-// GOOD LUCK STOP
+// WHENEVER A KEY IS PRESSED                                                     STOP
+// GOOD LUCK                                                                     STOP
 
 /**
+ * 
  * This class will teach you how to integrate JavaFX into a project.
  * Based on Oracle's Hello World Project from http://docs.oracle.com/javase/8/javafx/get-started-tutorial/hello_world.htm
  * Note that if you create a new JavaFX project you need to make the following
@@ -31,33 +33,27 @@ import javafx.stage.Stage;
  * 5. Double click "Access rules" and "Add" a new rule with "Resolution: Accessible"
  * and rule pattern "javafx/**" (no quotes when you enter it).
  * 
+ * Otherwise, you can download the e(fx)clipse plugin.
+ * 
  * JavaFX API Documentation: http://docs.oracle.com/javase/8/javafx/api/toc.htm
  * JavaFX Oracle Tutorials/Etc. http://docs.oracle.com/javase/8/javase-clienttechnologies.htm
- * @author Praveen
+ * @authors Patrick, Praveen
  *
  */
 public class Main extends Application {
 	
-	private Canvas canvas; // This is the class that has the canvas and canvas size
+	private Canvas canvas; // This is the class that represents a canvas and its contents
 	private GraphicsContext context; // This is the class that you call in order to draw on the screen
-	private FrameTimer timer; // Used to have a new frame be drawn many times a second
-	private KeyListener keyListener; // Used to react to key presses
+	private FrameTimer timer; // Repeatedly calls methods to simulate frames
+	private KeyListener keyListener; // Listens to key presses and releases.
 	private Image redBird = new Image("/redbird.png");
 	
-	/**
-	 * I got this from the Hello World tutorial and I have no idea what it does
-	 * but it must be important.
-	 * @param args
-	 */
-	 public static void main(String[] args) {
-	        launch(args);
-	    }
+	public static void main(String[] args) {
+        launch(args);
+    }
 
 	@Override
-	/**
-	 * This is the actual setup method called on app launch.
-	 * The primaryStage is the app window we can use to display stuff.
-	 */
+	// This is the setup method called on application launch.
 	public void start(Stage stage) {
 		
 		canvas = new Canvas(800, 600); // Create the canvas
@@ -66,39 +62,36 @@ public class Main extends Application {
 		Scene scene = new Scene(new Group(canvas)); // Create a "Scene" from the canvas.
 		stage.setScene(scene);
 		stage.show();
-		// RECAP: We are given the Stage. We give the Stage a Scene that has a Group that has a Canvas that has a Context . . . 
-		// No I don't know what much of this does
-		// but I think that it is mostly relevant only if we want to
-		// use the UI library (buttons and stuff). Since we are just
-		// drawing every frame manually through the graphics context,
-		// we don't need to do much with all of that.
+		
 		timer = new FrameTimer(this); // The Timer manages the game loop: whenever it runs,
 		// then the frame is updated.
 		timer.start();
 		keyListener = new KeyListener(this);
 		scene.setOnKeyPressed(keyListener);
+		
+		/* 
+		 * RECAP: We are given the Stage, which represents the physical window, such as dimensions and titles. 
+		 * Scene represents the back end, where key listeners are attached and takes in a Group of objects.
+		 * GraphicsContext is the painting mechanism of JavaFX
+		 */
 	}
 	
 	/**
-	 * Called whenever it is time to draw a new frame (presumably about 30-60 times per second).
+	 * Called by the FrameTimer whenever it is time to draw a new frame (presumably about 30-60 times per second).
 	 */
-	public void renderFrame()
-	{
-		context.drawImage(redBird, Math.random()*400, Math.random()*400);
-		context.setFill(Color.BLACK); // You set the fill once and then all text / shapes
-		// drawn will have that fill color until you change it.
-		// does not affect images as far as I am aware
+	public void renderFrame(){
+		context.drawImage(redBird, Math.random()*400, Math.random()*400); // Draws the image redBird at a random position from (0,0) to (400,400)
+		
+		context.setFill(Color.BLACK); // You set the fill once and then all text / shapes drawn will have that fill color until you change it.
+		// Fill color does not affect image drawing.
+		
 		context.fillText("How many frames have passed?", 500, 500);
-		// The above method is the primary one used to draw onto the canvas.
-		// Note that the canvas is not automaticaly 'refreshed' at the end of a frame.
-		// Any prior drawings remain and are 'painted over' by the new frame.
-		// You need to draw a background image / rectangle over the entire canvas
-		// to "clear" the frame each time.
+		// The above method is used to draw text onto the canvas.
+		// Note that the canvas is not automatically 'refreshed' at the end of a frame, since a frame is an artificial construct.
+		// Any prior drawings remain and are 'painted over' by the next call to renderFrame unless it is cleared.
 	}
 	
-	public void clearFrame()
-	{
-		context.setFill(Color.WHITE);
-		context.fillRect(0, 0, 1000, 1000);
+	public void clearFrame(){
+		context.clearRect(0, 0, 800, 600); // Clears a rectangle with left corner at (0,0), width 800, and height 600
 	}
 }
