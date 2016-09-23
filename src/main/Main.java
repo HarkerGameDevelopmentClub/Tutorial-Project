@@ -18,7 +18,8 @@ import javafx.stage.Stage;
 // AND EDIT IT SO THAT THE PROJECT DISPLAYS THE CURRENT
 // FRAME ON SCREEN, AND RESETS THE # OF FRAMES
 // WHENEVER A KEY IS PRESSED                                                     STOP
-// GOOD LUCK                                                                     STOP
+// GOOD LUCK  
+
 
 /**
  * 
